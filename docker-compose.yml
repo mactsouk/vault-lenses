@@ -8,11 +8,26 @@ services:
     environment:
       EULA: "${LICENSE}"
     networks:
-      - lenses-box
+      - lenses
     ports:
       - 3030:3030
 
-networks:
-  lenses-box:
-    driver: bridge
+  vault:
+    image: vault
+    container_name: vault
+    restart: always
+    networks:
+      - lenses
+    ports:
+      - 8200:8200
+    cap_add:
+      - IPC_LOCK
+    command: vault server -config=/vault/config/vault.json
+    volumes:
+      - ./vault/policies:/vault/policies
+      - ./vault/data:/vault/data
+      - ./vault/config:/vault/config
 
+networks:
+  lenses:
+    driver: bridge
