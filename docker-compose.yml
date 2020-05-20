@@ -33,6 +33,20 @@ services:
       - ./vault/data:/vault/data
       - ./vault/config:/vault/config
 
+  influxdb:
+    image: influxdb
+    container_name: influxdb
+    restart: always
+    environment:
+      - INFLUXDB_DB=devdb
+      - INFLUXDB_ADMIN_ENABLED=true
+      - INFLUXDB_ADMIN_USER=root
+      - INFLUXDB_ADMIN_PASSWORD=root
+    networks:
+      - lenses
+    ports:
+      - 8086:8086
+
 networks:
   lenses:
     driver: bridge
